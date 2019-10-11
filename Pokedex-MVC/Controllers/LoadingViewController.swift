@@ -73,9 +73,10 @@ class LoadingViewController: UIViewController {
         
         let pokedex = Pokedex()
         pokedex.downloadList() { (pokemonList) in
-            
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "pokemonListSegue", sender: self)
+            }
         }
-        
         
     }
     

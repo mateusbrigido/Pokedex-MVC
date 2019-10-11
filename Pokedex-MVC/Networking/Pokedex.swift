@@ -4,13 +4,13 @@ class Pokedex {
     
     private let sessionManager = SessionManager()
     
-    private(set) var list: [Pokemon]?
+    private(set) static var list = [Pokemon]()
     
     func downloadList(completed: @escaping ([Pokemon]) -> Void) {
-        if let pokemonList = self.list, pokemonList.count > 0 { completed(pokemonList) }
+        if Pokedex.list.count > 0 { completed(Pokedex.list) }
         
         sessionManager.getPokemonList { (pokemonList) in
-            self.list = pokemonList
+            Pokedex.list = pokemonList
             completed(pokemonList)
         }
     }
