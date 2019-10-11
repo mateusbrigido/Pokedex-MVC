@@ -70,6 +70,13 @@ class LoadingViewController: UIViewController {
         
         setGradientBackground()
         setBlur()
+        
+        let pokedex = Pokedex()
+        pokedex.downloadList() { (pokemonList) in
+            
+        }
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
