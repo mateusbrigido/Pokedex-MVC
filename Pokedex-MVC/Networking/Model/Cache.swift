@@ -4,19 +4,24 @@ import UIKit
 struct Cache {
     
     private static var images = [URL : UIImage]()
+    private static let downloadQueue = DispatchQueue(label: "ImageDownloadQueue", attributes: .concurrent)
+    private static let updateQueue = DispatchQueue(label: "ImageUpdateQueue")
     
     static func getImage(for url: URL, completed: @escaping (UIImage?) -> Void) {
-        if let image = images[url] {
-            completed(image)
-            return
+        Cache.updateQueue.async {
+            if let image = images[url] {
+                completed(image)
+                return
+            }
         }
         
-        DispatchQueue.global(qos: .userInitiated).async {
+        
+        Cache.downloadQueue.async {
             if let data = try? Data(contentsOf: url) {
-                let image = UIImage(data: data)
-                images[url] = image
-                
-                completed(image)
+                Cache.updateQueue.async {
+                    images[url] = UIImage(data: data)
+                    completed(images[url])
+                }
             }
         }
     }
