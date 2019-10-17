@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  Pokedex-MVC
-//
-//  Created by Mateus Brigido on 07/10/19.
-//  Copyright © 2019 Mateus Brigido. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

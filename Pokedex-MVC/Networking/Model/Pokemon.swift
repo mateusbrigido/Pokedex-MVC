@@ -50,6 +50,4 @@ extension Pokemon: Decodable {
             case shiny
         }
     }
-    
-    
 }
