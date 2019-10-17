@@ -27,16 +27,14 @@ class PokemonDetailsViewController: UIViewController {
     
     @IBOutlet var statsFillBars: [UIView]! {
         didSet {
-            for bar in statsFillBars {
-                bar.round(with: 4)
-            }
+            let _ = statsFillBars.map({ $0.round(with: 4) })
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.setTypeBackgroundColor(for: pokemon!.types[0].name)
+        view.setTypeBackgroundColor(for: pokemon!.types[0].name, rotation: 3 * CGFloat.pi / 2)
         
         nameLabel.text = pokemon.name
         descriptionLabel.text = pokemon.description
@@ -100,7 +98,7 @@ class PokemonDetailsViewController: UIViewController {
             self.view.layoutIfNeeded()
             
             for bar in self.statsFillBars {
-                bar.setTypeBackgroundColor(for: self.pokemon.types[0].name)
+                bar.setTypeBackgroundColor(for: self.pokemon.types[0].name, rotation: CGFloat.pi / 2)
             }
         })
     }
