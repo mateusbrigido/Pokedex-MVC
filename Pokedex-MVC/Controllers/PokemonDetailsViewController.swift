@@ -2,7 +2,7 @@ import UIKit
 
 class PokemonDetailsViewController: UIViewController {
 
-    var pokemon: Pokemon?
+    var pokemon: Pokemon!
     
     @IBOutlet weak var pokemonImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -38,48 +38,47 @@ class PokemonDetailsViewController: UIViewController {
         
         view.setTypeBackgroundColor(for: pokemon!.types[0].name)
         
-        nameLabel.text = pokemon?.name
-        descriptionLabel.text = pokemon?.description
+        nameLabel.text = pokemon.name
+        descriptionLabel.text = pokemon.description
         
         for stat in pokemon!.stats {
             switch stat.name {
             case "hp":
                 statsValues[0].text = "\(stat.value)"
-                statsNames[0].textColor = UIColor(named: "\(pokemon!.types[0].name)-1")
+                statsNames[0].textColor = UIColor(named: "\(pokemon.types[0].name)-1")
             case "attack":
                 statsValues[1].text = "\(stat.value)"
-                statsNames[1].textColor = UIColor(named: "\(pokemon!.types[0].name)-1")
+                statsNames[1].textColor = UIColor(named: "\(pokemon.types[0].name)-1")
             case "defense":
                 statsValues[2].text = "\(stat.value)"
-                statsNames[2].textColor = UIColor(named: "\(pokemon!.types[0].name)-1")
+                statsNames[2].textColor = UIColor(named: "\(pokemon.types[0].name)-1")
             case "special-attack":
                 statsValues[3].text = "\(stat.value)"
-                statsNames[3].textColor = UIColor(named: "\(pokemon!.types[0].name)-1")
+                statsNames[3].textColor = UIColor(named: "\(pokemon.types[0].name)-1")
             case "special-defense":
                 statsValues[4].text = "\(stat.value)"
-                statsNames[4].textColor = UIColor(named: "\(pokemon!.types[0].name)-1")
+                statsNames[4].textColor = UIColor(named: "\(pokemon.types[0].name)-1")
             case "speed":
                 statsValues[5].text = "\(stat.value)"
-                statsNames[5].textColor = UIColor(named: "\(pokemon!.types[0].name)-1")
+                statsNames[5].textColor = UIColor(named: "\(pokemon.types[0].name)-1")
             default: break
             }
         }
         
         for index in pokemon!.types.indices {
-            typesImageViews[index].image = UIImage(named: "\(pokemon!.types[index].name)-tag")
+            typesImageViews[index].image = UIImage(named: "\(pokemon.types[index].name)-tag")
             typesImageViews[index].isHidden = false
         }
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            let data = try! Data(contentsOf: self.pokemon!.defaultSprite)
-            
+        Cache.getImage(for: self.pokemon.defaultSprite) { [weak self] (image) in
             DispatchQueue.main.async {
-                self.pokemonImageView.image = UIImage(data: data)
+                self?.pokemonImageView.image = image
             }
         }
     }
+    
     override func viewDidAppear(_ animated: Bool) {
-        for stat in pokemon!.stats {
+        for stat in pokemon.stats {
             switch stat.name {
             case "hp":
                 statsFillBarWidths[0].constant = CGFloat((Double(stat.value)/255.0) * 240)
@@ -101,7 +100,7 @@ class PokemonDetailsViewController: UIViewController {
             self.view.layoutIfNeeded()
             
             for bar in self.statsFillBars {
-                bar.setTypeBackgroundColor(for: self.pokemon!.types[0].name)
+                bar.setTypeBackgroundColor(for: self.pokemon.types[0].name)
             }
         })
     }
