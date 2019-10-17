@@ -2,8 +2,10 @@ import UIKit
 
 class PokemonListViewController: UIViewController {
 
-    private let pokedex = Pokedex()
+    @IBOutlet weak var tableView: UITableView!
     
+    private let pokedex = Pokedex()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -34,6 +36,16 @@ class PokemonListViewController: UIViewController {
         self.view.insertSubview(blurEffectView, at: 1)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+            case "pokemonDetailsSegue":
+                let detailsVC = segue.destination as! PokemonDetailsViewController
+                detailsVC.pokemon = sender as? Pokemon
+            default:
+                break;
+        }
+    }
+    
 }
 
 //MARK: - UITableViewDataSource, UITableViewDelegate
@@ -50,18 +62,21 @@ extension PokemonListViewController: UITableViewDataSource, UITableViewDelegate 
         cell.nameLabel.text = pokemon.name
         cell.orderLabel.text = "#\(pokemon.order)"
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            let data = try! Data(contentsOf: pokemon.defaultSprite)
-            
-            DispatchQueue.main.async {
-                cell.pokemonImageView.image = UIImage(data: data)
-            }
+        Cache.getImage(for: pokemon.defaultSprite) { (image) in
+            DispatchQueue.main.async { [weak self] in
+                let cellToUpdate = self?.tableView.cellForRow(at: indexPath) as? PokemonTableViewCell
+                cellToUpdate?.pokemonImageView.image = image
+            }   
         }
         
         for index in pokemon.types.indices {
-            cell.typesImageViews[index].image = UIImage(named: pokemon.types[pokemon.types.count - index - 1].name)
+            cell.typesImageViews[index].image = UIImage(named: "\(pokemon.types[pokemon.types.count - index - 1].name)-badge")
         }
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "pokemonDetailsSegue", sender: Pokedex.list[indexPath.row])
     }
 }
