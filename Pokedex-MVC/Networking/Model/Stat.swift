@@ -1,15 +1,15 @@
 import Foundation
 
-struct Type {
+struct Stat {
     var name: String
-    var slot: Int
+    var value: Int
 }
 
-extension Type: Decodable {
+extension Stat: Decodable {
     
-    enum TypeKeys: String, CodingKey {
+    enum StatKeys: String, CodingKey {
         case name
-        case slot
+        case value
     }
     
 }
