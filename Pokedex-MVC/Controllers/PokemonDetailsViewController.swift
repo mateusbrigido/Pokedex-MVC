@@ -21,13 +21,13 @@ class PokemonDetailsViewController: UIViewController {
     
     @IBOutlet var statsBackgroundBars: [UIView]! {
         didSet {
-            let _ = statsBackgroundBars.map({ $0.round(with: 4) })
+            statsBackgroundBars.forEach { $0.round(with: 4) }
         }
     }
     
     @IBOutlet var statsFillBars: [UIView]! {
         didSet {
-            let _ = statsFillBars.map({ $0.round(with: 4) })
+            statsFillBars.forEach { $0.round(with: 4) }
         }
     }
     
