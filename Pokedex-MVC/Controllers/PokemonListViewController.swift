@@ -3,9 +3,9 @@ import UIKit
 class PokemonListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    
-    private let pokedex = Pokedex()
 
+    private var pokemonList = Pokedex.list
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -40,7 +40,7 @@ class PokemonListViewController: UIViewController {
         switch segue.identifier {
             case "pokemonDetailsSegue":
                 let detailsVC = segue.destination as! PokemonDetailsViewController
-                detailsVC.pokemon = sender as? Pokemon
+                detailsVC.pokemon = self.pokemonList[tableView.indexPathForSelectedRow!.row]
             default:
                 break;
         }
@@ -51,13 +51,13 @@ class PokemonListViewController: UIViewController {
 //MARK: - UITableViewDataSource, UITableViewDelegate
 extension PokemonListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Pokedex.list.count
+        return self.pokemonList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "pokemonCell", for: indexPath) as! PokemonTableViewCell
         
-        let pokemon = Pokedex.list[indexPath.row]
+        let pokemon = self.pokemonList[indexPath.row]
         
         cell.nameLabel.text = pokemon.name
         cell.orderLabel.text = "#\(pokemon.order)"
@@ -77,6 +77,19 @@ extension PokemonListViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "pokemonDetailsSegue", sender: Pokedex.list[indexPath.row])
+        performSegue(withIdentifier: "pokemonDetailsSegue", sender: nil)
+    }
+}
+
+//MARK: - UISearchBarDelegate
+extension PokemonListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            self.pokemonList = Pokedex.list
+        } else {
+            self.pokemonList = Pokedex.list.filter { $0.name.contains(searchText) }
+        }
+        
+        tableView.reloadData()
     }
 }
