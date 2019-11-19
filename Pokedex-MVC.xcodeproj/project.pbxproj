@@ -115,7 +115,6 @@
 		66E04B27234B89C90086F272 = {
 			isa = PBXGroup;
 			children = (
-				66A7D9762350F98100B48DBA /* Supporting Files */,
 				66E04B32234B89C90086F272 /* Pokedex-MVC */,
 				66E04B31234B89C90086F272 /* Products */,
 			);
@@ -132,6 +131,7 @@
 		66E04B32234B89C90086F272 /* Pokedex-MVC */ = {
 			isa = PBXGroup;
 			children = (
+				66A7D9762350F98100B48DBA /* Supporting Files */,
 				668C2B372350981800830954 /* Views */,
 				6619D5CB234CA80C00C9760E /* Controllers */,
 				66E04B47234B89F60086F272 /* Networking */,
