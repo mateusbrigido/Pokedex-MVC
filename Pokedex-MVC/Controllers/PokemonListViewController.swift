@@ -60,7 +60,7 @@ extension PokemonListViewController: UITableViewDataSource, UITableViewDelegate 
         let pokemon = self.pokemonList[indexPath.row]
         
         cell.nameLabel.text = pokemon.name
-        cell.orderLabel.text = "#\(pokemon.order)"
+        cell.orderLabel.text = String(format: "#%03d",  pokemon.order)
         
         Cache.getImage(for: pokemon.defaultSprite) { (image) in
             DispatchQueue.main.async { [weak self] in
